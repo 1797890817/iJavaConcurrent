@@ -4,24 +4,25 @@ package geym.conc.ch2.notsafe;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * use JDK 7
- * JDK 8²»»áËÀÑ­»·£¬Ö»»áÊı¾İ²»Ò»ÖÂ
- * @author Geym
+ * JDK 8ä¸ä¼šæ­»å¾ªç¯ï¼Œåªä¼šæ•°æ®ä¸ä¸€è‡´
  *
+ * @author Geym
  */
 public class JDK8HashMapMultiThread {
 
-    static Map<String,String> map = new HashMap<String,String>();
+    static Map<String, String> map = new HashMap<String, String>();
 //    static Map map = new ConcurrentHashMap(10);
 
     public static class AddThread implements Runnable {
-        int start=0;
-        public AddThread(int start){
-            this.start=start;
+        int start = 0;
+
+        public AddThread(int start) {
+            this.start = start;
         }
+
         @Override
         public void run() {
             for (int i = start; i < 10000; i++) {
@@ -30,30 +31,32 @@ public class JDK8HashMapMultiThread {
         }
     }
 
-    public static void test() throws Exception{
-        Thread t1=new Thread(new JDK8HashMapMultiThread.AddThread(0));
-        Thread t2=new Thread(new JDK8HashMapMultiThread.AddThread(1));
+    public static void test() throws Exception {
+        Thread t1 = new Thread(new JDK8HashMapMultiThread.AddThread(0));
+        Thread t2 = new Thread(new JDK8HashMapMultiThread.AddThread(1));
         t1.start();
         t2.start();
-        t1.join();t2.join();
-        System.out.println("map size="+map.size());
-        System.out.println("table count="+getTableSize());
+        t1.join();
+        t2.join();
+        System.out.println("map size=" + map.size());
+        System.out.println("table count=" + getTableSize());
     }
+
     public static void main(String[] args) throws Exception {
-        
-        for(int i=0;i<100;i++){
+
+        for (int i = 0; i < 100; i++) {
             test();
-            map = new HashMap<String,String>();
+            map = new HashMap<String, String>();
         }
     }
-    
-    public static int getTableSize() throws Exception{
-        Field fTable=map.getClass().getDeclaredField("table");
+
+    public static int getTableSize() throws Exception {
+        Field fTable = map.getClass().getDeclaredField("table");
         fTable.setAccessible(true);
-        Object[] table=(Object[])fTable.get(map);
-        int count=0;
-        for(int i=0;i<table.length;i++){
-           if(table[i]!=null)count++; 
+        Object[] table = (Object[]) fTable.get(map);
+        int count = 0;
+        for (int i = 0; i < table.length; i++) {
+            if (table[i] != null) count++;
         }
         fTable.setAccessible(false);
         return count;

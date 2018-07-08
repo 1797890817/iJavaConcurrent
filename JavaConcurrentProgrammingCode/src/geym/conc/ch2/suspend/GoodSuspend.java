@@ -6,17 +6,18 @@ public class GoodSuspend {
 
     public static class ChangeObjectThread extends Thread {
         volatile boolean suspendme = false;
-        
+
         public void suspendMe() {
             suspendme = true;
         }
 
-        public void resumeMe(){
-            suspendme=false;
-            synchronized (this){
+        public void resumeMe() {
+            suspendme = false;
+            synchronized (this) {
                 notify();
             }
         }
+
         @Override
         public void run() {
             while (true) {

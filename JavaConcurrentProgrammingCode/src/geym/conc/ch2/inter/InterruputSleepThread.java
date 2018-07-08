@@ -1,34 +1,34 @@
 package geym.conc.ch2.inter;
 
 /**
- * sleepÖĞ¶Ïºó Å×³öÒì³£±»ÖØÖÃÖĞ¶Ï×´Ì¬
- * Èç¹ûÏ£Íûsleepºó¿ÉÒÔÅĞ¶ÏÖĞ¶Ï×´Ì¬£¬Ôò±ØĞëÔÚsleepµÄÒì³£´¦ÀíÖĞ£¬ÔÚÉèÖÃÖĞ¶Ï
- * @author Administrator
+ * sleepä¸­æ–­å æŠ›å‡ºå¼‚å¸¸è¢«é‡ç½®ä¸­æ–­çŠ¶æ€
+ * å¦‚æœå¸Œæœ›sleepåå¯ä»¥åˆ¤æ–­ä¸­æ–­çŠ¶æ€ï¼Œåˆ™å¿…é¡»åœ¨sleepçš„å¼‚å¸¸å¤„ç†ä¸­ï¼Œåœ¨è®¾ç½®ä¸­æ–­
  *
+ * @author Administrator
  */
 public class InterruputSleepThread {
-	public static void main(String[] args) throws InterruptedException {
-		Thread t1=new Thread(){
-			@Override
-			public void run(){
-				while(true){
-					if(Thread.currentThread().isInterrupted()){
-						System.out.println("Interruted!");
-						break;
-					}
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						System.out.println("Interruted When Sleep");
-						//ÉèÖÃÖĞ¶Ï×´Ì¬
-						Thread.currentThread().interrupt();
-					}
-					Thread.yield();
-				}
-			}
-		};
-		t1.start();
-		Thread.sleep(2000);
-		t1.interrupt();
-	}
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Interruted!");
+                        break;
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Interruted When Sleep");
+                        //è®¾ç½®ä¸­æ–­çŠ¶æ€
+                        Thread.currentThread().interrupt();
+                    }
+                    Thread.yield();
+                }
+            }
+        };
+        t1.start();
+        Thread.sleep(2000);
+        t1.interrupt();
+    }
 }

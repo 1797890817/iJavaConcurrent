@@ -1,27 +1,27 @@
 package geym.conc.ch2.inter;
 
 /**
- * ÖĞ¶Ï×´Ì¬¿ÉÒÔ¼ì²â£¬²¢ÔÚÓ¦ÓÃÉÏ×÷³öÏàÓ¦
- * Èç¹ûÓ¦ÓÃ²»ÏàÓ¦ÖĞ¶Ï£¬ÔòT1ÓÀÔ¶²»»áÍË³ö
- * @author Administrator
+ * ä¸­æ–­çŠ¶æ€å¯ä»¥æ£€æµ‹ï¼Œå¹¶åœ¨åº”ç”¨ä¸Šä½œå‡ºç›¸åº”
+ * å¦‚æœåº”ç”¨ä¸ç›¸åº”ä¸­æ–­ï¼Œåˆ™T1æ°¸è¿œä¸ä¼šé€€å‡º
  *
+ * @author Administrator
  */
 public class InterruputThread {
-	public static void main(String[] args) throws InterruptedException {
-		Thread t1=new Thread(){
-			@Override
-			public void run(){
-				while(true){
-					if(Thread.currentThread().isInterrupted()){
-						System.out.println("Interruted!");
-						break;
-					}
-					Thread.yield();
-				}
-			}
-		};
-		t1.start();
-		Thread.sleep(2000);
-		t1.interrupt();
-	}
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Interruted!");
+                        break;
+                    }
+                    Thread.yield();
+                }
+            }
+        };
+        t1.start();
+        Thread.sleep(2000);
+        t1.interrupt();
+    }
 }
