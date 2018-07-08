@@ -3,53 +3,59 @@ package geym.conc.ch3.synctrl;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class IntLock implements Runnable {
-	public static ReentrantLock lock1 = new ReentrantLock();
-	public static ReentrantLock lock2 = new ReentrantLock();
-	int lock;
-	/**
-	 * ¿ØÖÆ¼ÓËøË³Ğò£¬·½±ã¹¹ÔìËÀËø
-	 * @param lock
-	 */
-	public IntLock(int lock) {
-		this.lock = lock;
-	}
+    public static ReentrantLock lock1 = new ReentrantLock();
+    public static ReentrantLock lock2 = new ReentrantLock();
+    int lock;
 
-	@Override
-	public void run() {
-		try {
-			if (lock == 1) {
-				lock1.lockInterruptibly();
-				try{
-					Thread.sleep(500);
-				}catch(InterruptedException e){}
-				lock2.lockInterruptibly();
-			} else {
-				lock2.lockInterruptibly();
-				try{
-					Thread.sleep(500);
-				}catch(InterruptedException e){}
-				lock1.lockInterruptibly();
-			}
+    /**
+     * æ§åˆ¶åŠ é”é¡ºåºï¼Œæ–¹ä¾¿æ„é€ æ­»é”
+     *
+     * @param lock
+     */
+    public IntLock(int lock) {
+        this.lock = lock;
+    }
 
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			if (lock1.isHeldByCurrentThread())
-				lock1.unlock();
-			if (lock2.isHeldByCurrentThread())
-				lock2.unlock();
-			System.out.println(Thread.currentThread().getId()+":Ïß³ÌÍË³ö");
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            if (lock == 1) {
+                lock1.lockInterruptibly();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                }
+                lock2.lockInterruptibly();
+            } else {
+                lock2.lockInterruptibly();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                }
+                lock1.lockInterruptibly();
+            }
 
-	public static void main(String[] args) throws InterruptedException {
-		IntLock r1 = new IntLock(1);
-		IntLock r2 = new IntLock(2);
-		Thread t1 = new Thread(r1);
-		Thread t2 = new Thread(r2);
-		t1.start();t2.start();
-		Thread.sleep(1000);
-		//ÖĞ¶ÏÆäÖĞÒ»¸öÏß³Ì
-		t2.interrupt();
-	}
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            if (lock1.isHeldByCurrentThread())
+                lock1.unlock();
+            if (lock2.isHeldByCurrentThread())
+                lock2.unlock();
+            System.out.println(Thread.currentThread().getId() + "ï¼šçº¿ç¨‹é€€å‡ºï¼");
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+
+        IntLock r1 = new IntLock(1);
+        IntLock r2 = new IntLock(2);
+        Thread t1 = new Thread(r1);
+        Thread t2 = new Thread(r2);
+        t1.start();
+        t2.start();
+        Thread.sleep(1000);
+        //ä¸­æ–­å…¶ä¸­ä¸€ä¸ªçº¿ç¨‹
+        t2.interrupt();
+    }
 }

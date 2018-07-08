@@ -7,23 +7,23 @@ import java.util.concurrent.TimeUnit;
 
 public class ScheduledExecutorServiceDemo {
     public static void main(String[] args) {
-        ScheduledExecutorService ses=Executors.newScheduledThreadPool(10);
-        //Èç¹ûÇ°ÃæµÄÈÎÎñÃ»ÓĞÍê³É£¬Ôòµ÷¶ÈÒ²²»»áÆô¶¯
+        ScheduledExecutorService ses = Executors.newScheduledThreadPool(10);
+        //å¦‚æœå‰é¢çš„ä»»åŠ¡æ²¡æœ‰å®Œæˆï¼Œåˆ™è°ƒåº¦ä¹Ÿä¸ä¼šå¯åŠ¨
         ses.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.sleep(1000);
-                    System.out.println(System.currentTimeMillis()/1000);
+                    System.out.println(System.currentTimeMillis() / 1000);
 //                    if(System.currentTimeMillis()%2==0){
 //                    	System.out.println("exception");
 //                    	throw new RuntimeException();
 //                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }                
+                }
             }
-        }, 0, 2, TimeUnit.SECONDS);
-        
+        }, 0, 2, TimeUnit.SECONDS);//è¯´æ¯ 2 ç§’é’Ÿï¼Œä»»åŠ¡å°±ä¼šè¢«æ‰§è¡Œä¸€æ¬¡ ã€‚
+
     }
 }

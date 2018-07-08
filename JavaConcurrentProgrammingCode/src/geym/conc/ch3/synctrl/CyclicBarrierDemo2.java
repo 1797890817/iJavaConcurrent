@@ -1,9 +1,6 @@
 
 package geym.conc.ch3.synctrl;
 
-import geym.conc.ch3.synctrl.CyclicBarrierDemo.BarrierRun;
-import geym.conc.ch3.synctrl.CyclicBarrierDemo.Soldier;
-
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -22,10 +19,10 @@ public class CyclicBarrierDemo2 {
 
         public void run() {
             try {
-                //µÈ´ıËùÓĞÊ¿±øµ½Æë
+                //ç­‰å¾…æ‰€æœ‰å£«å…µåˆ°é½
                 cyclic.await();
                 doWork();
-                //µÈ´ıËùÓĞÊ¿±øÍê³É¹¤×÷
+                //ç­‰å¾…æ‰€æœ‰å£«å…µå®Œæˆå·¥ä½œ
                 cyclic.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -36,17 +33,18 @@ public class CyclicBarrierDemo2 {
 
         void doWork() {
             try {
-                Thread.sleep(Math.abs(new Random().nextInt()%10000));
+                Thread.sleep(Math.abs(new Random().nextInt() % 10000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(soldier + ":ÀÍ¶¯Íê³É");
+            System.out.println(soldier + ":åŠ³åŠ¨å®Œæˆ");
         }
     }
 
     public static class BarrierRun implements Runnable {
         boolean flag;
         int N;
+
         public BarrierRun(boolean flag, int N) {
             this.flag = flag;
             this.N = N;
@@ -54,9 +52,9 @@ public class CyclicBarrierDemo2 {
 
         public void run() {
             if (flag) {
-                System.out.println("Ë¾Áî:[Ê¿±ø" + N + "¸ö£¬ÈÎÎñÍê³É£¡]");
+                System.out.println("å¸ä»¤:[å£«å…µ" + N + "ä¸ªï¼Œä»»åŠ¡å®Œæˆï¼]");
             } else {
-                System.out.println("Ë¾Áî:[Ê¿±ø" + N + "¸ö£¬¼¯ºÏÍê±Ï£¡]");
+                System.out.println("å¸ä»¤:[å£«å…µ" + N + "ä¸ªï¼Œé›†åˆå®Œæ¯•ï¼]");
                 flag = true;
             }
         }
@@ -64,17 +62,17 @@ public class CyclicBarrierDemo2 {
 
     public static void main(String args[]) throws InterruptedException {
         final int N = 10;
-        Thread[] allSoldier=new Thread[N];
+        Thread[] allSoldier = new Thread[N];
         boolean flag = false;
         CyclicBarrier cyclic = new CyclicBarrier(N, new BarrierRun(flag, N));
-        //ÉèÖÃÆÁÕÏµã£¬Ö÷ÒªÊÇÎªÁËÖ´ĞĞÕâ¸ö·½·¨
-        System.out.println("¼¯ºÏ¶ÓÎé£¡");
+        //è®¾ç½®å±éšœç‚¹ï¼Œä¸»è¦æ˜¯ä¸ºäº†æ‰§è¡Œè¿™ä¸ªæ–¹æ³•
+        System.out.println("é›†åˆé˜Ÿä¼ï¼");
         for (int i = 0; i < N; ++i) {
-            System.out.println("Ê¿±ø "+i+" ±¨µÀ£¡");
-            allSoldier[i]=new Thread(new Soldier(cyclic, "Ê¿±ø " + i));
+            System.out.println("å£«å…µ " + i + " æŠ¥é“ï¼");
+            allSoldier[i] = new Thread(new Soldier(cyclic, "å£«å…µ " + i));
             allSoldier[i].start();
-            if(i==5){
-            	allSoldier[0].interrupt();
+            if (i == 5) {
+                allSoldier[0].interrupt();
             }
         }
     }

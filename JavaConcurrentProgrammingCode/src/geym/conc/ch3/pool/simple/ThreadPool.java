@@ -3,77 +3,66 @@ package geym.conc.ch3.pool.simple;
 import java.util.List;
 import java.util.Vector;
 
-public class ThreadPool 
-{
+public class ThreadPool {
     private static ThreadPool instance = null;
 
-    //¿ÕÏĞµÄÏß³Ì¶ÓÁĞ
+    //ç©ºé—²çš„çº¿ç¨‹é˜Ÿåˆ—
     private List<Worker> idleThreads;
-    //ÒÑÓĞµÄÏß³Ì×ÜÊı
+    //å·²æœ‰çš„çº¿ç¨‹æ€»æ•°
     private int threadCounter;
     private boolean isShutDown = false;
-    
-    private ThreadPool() 
-    {       
+
+    private ThreadPool() {
         this.idleThreads = new Vector(5);
         threadCounter = 0;
     }
-    
+
     public int getCreatedThreadsCount() {
         return threadCounter;
     }
-    
-    //È¡µÃÏß³Ì³ØµÄÊµÀı
+
+    //å–å¾—çº¿ç¨‹æ± çš„å®ä¾‹
     public synchronized static ThreadPool getInstance() {
         if (instance == null)
             instance = new ThreadPool();
         return instance;
     }
-   
-    //½«Ïß³Ì·ÅÈë³ØÖĞ
-    protected synchronized void repool(Worker repoolingThread)
-    {
-        if (!isShutDown) 
-        {
+
+    //å°†çº¿ç¨‹æ”¾å…¥æ± ä¸­
+    protected synchronized void repool(Worker repoolingThread) {
+        if (!isShutDown) {
             idleThreads.add(repoolingThread);
-        }
-        else 
-        {
-            repoolingThread.shutDown();//¹Ø±ÕÏß³Ì
+        } else {
+            repoolingThread.shutDown();//å…³é—­çº¿ç¨‹
         }
     }
-        
-    //Í£Ö¹³ØÖĞËùÓĞÏß³Ì
-    public synchronized void shutdown()
-    {
-       isShutDown = true;
-       for (int threadIndex = 0; threadIndex < idleThreads.size(); threadIndex++)
-       {
-             Worker idleThread = (Worker) idleThreads.get(threadIndex);
-             idleThread.shutDown();
-       }
+
+    //åœæ­¢æ± ä¸­æ‰€æœ‰çº¿ç¨‹
+    public synchronized void shutdown() {
+        isShutDown = true;
+        for (int threadIndex = 0; threadIndex < idleThreads.size(); threadIndex++) {
+            Worker idleThread = (Worker) idleThreads.get(threadIndex);
+            idleThread.shutDown();
+        }
     }
-    
-    //Ö´ĞĞÈÎÎñ
-    public synchronized void start(Runnable target)
-    {
-        Worker thread = null; 
-        //Èç¹ûÓĞ¿ÕÏĞÏß³Ì£¬ÔòÖ±½ÓÊ¹ÓÃ
-        if (idleThreads.size() > 0) 
-        {
+
+    //æ‰§è¡Œä»»åŠ¡
+    public synchronized void start(Runnable target) {
+        Worker thread = null;
+        //å¦‚æœæœ‰ç©ºé—²çº¿ç¨‹ï¼Œåˆ™ç›´æ¥ä½¿ç”¨
+        if (idleThreads.size() > 0) {
             int lastIndex = idleThreads.size() - 1;
             thread = (Worker) idleThreads.get(lastIndex);
             idleThreads.remove(lastIndex);
-            //Á¢¼´Ö´ĞĞÕâ¸öÈÎÎñ
+            //ç«‹å³æ‰§è¡Œè¿™ä¸ªä»»åŠ¡
             thread.setTarget(target);
         }
-        //Ã»ÓĞ¿ÕÏĞÏß³Ì£¬Ôò´´½¨ĞÂÏß³Ì
-        else 
-        { 
+        //æ²¡æœ‰ç©ºé—²çº¿ç¨‹ï¼Œåˆ™åˆ›å»ºæ–°çº¿ç¨‹
+        else {
             threadCounter++;
-            // ´´½¨ĞÂÏß³Ì£¬
+            // åˆ›å»ºæ–°çº¿ç¨‹ï¼Œ
             thread = new Worker(target, "PThread #" + threadCounter, this);
-            //Æô¶¯Õâ¸öÏß³Ì
+            //å¯åŠ¨è¿™ä¸ªçº¿ç¨‹
             thread.start();
         }
     }

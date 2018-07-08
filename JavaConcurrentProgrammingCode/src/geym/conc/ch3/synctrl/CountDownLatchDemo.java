@@ -6,32 +6,35 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * µ¹Êý¼ÆÊ±Æ÷
- * @author Geym
+ * å€’æ•°è®¡æ—¶å™¨
  *
+ * @author Geym
  */
 public class CountDownLatchDemo implements Runnable {
     static final CountDownLatch end = new CountDownLatch(10);
-    static final CountDownLatchDemo demo=new CountDownLatchDemo();
+    static final CountDownLatchDemo demo = new CountDownLatchDemo();
+
     @Override
     public void run() {
         try {
-            //Ä£Äâ¼ì²éÈÎÎñ
-            Thread.sleep(new Random().nextInt(10)*1000);
-            System.out.println("check complete");
+            //æ¨¡æ‹Ÿæ£€æŸ¥ä»»åŠ¡
+            Thread.sleep(new Random().nextInt(10) * 1000);
+            System.out.println(Thread.currentThread().getId() + " check complete!");
             end.countDown();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) throws InterruptedException {
+        //ä½¿ç”¨çº¿ç¨‹æ± ï¼Œ10ä¸ªçº¿ç¨‹åˆ†åˆ«è¡¨ç¤º10ä¸ªæ£€æŸ¥ä»»åŠ¡ã€‚
         ExecutorService exec = Executors.newFixedThreadPool(10);
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             exec.submit(demo);
         }
-        //µÈ´ý¼ì²é
+        //ç­‰å¾…æ£€æŸ¥
         end.await();
-        //·¢Éä»ð¼ý
+        //å‘å°„ç«ç®­
         System.out.println("Fire!");
         exec.shutdown();
     }

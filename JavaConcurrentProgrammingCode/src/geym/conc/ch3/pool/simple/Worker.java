@@ -1,69 +1,57 @@
 package geym.conc.ch3.pool.simple;
 
-public class Worker extends Thread 
-{
-	//Ïß³Ì³Ø
+public class Worker extends Thread {
+    //çº¿ç¨‹æ± 
     private ThreadPool pool;
-    //ÈÎÎñ
-    private Runnable target;   
+    //ä»»åŠ¡
+    private Runnable target;
     private boolean isShutDown = false;
     private boolean isIdle = false;
-    
-    public Worker(Runnable target, String name, ThreadPool pool)
-    {
+
+    public Worker(Runnable target, String name, ThreadPool pool) {
         super(name);
         this.pool = pool;
         this.target = target;
     }
-    
-    public Runnable getTarget() 
-    {
+
+    public Runnable getTarget() {
         return target;
     }
-    
-    public boolean isIdle() 
-    {
+
+    public boolean isIdle() {
         return isIdle;
     }
-    public void run() 
-    {
-        while (!isShutDown) 
-        {  
+
+    public void run() {
+        while (!isShutDown) {
             isIdle = false;
-            if (target != null) 
-            {
-            	// ÔËĞĞÈÎÎñ
-                target.run();  
+            if (target != null) {
+                // è¿è¡Œä»»åŠ¡
+                target.run();
             }
-            //ÈÎÎñ½áÊøÁË
+            //ä»»åŠ¡ç»“æŸäº†
             isIdle = true;
-            try 
-            {
-            	//¸ÃÈÎÎñ½áÊøºó£¬²»¹Ø±ÕÏß³Ì£¬¶øÊÇ·ÅÈëÏß³Ì³Ø¿ÕÏĞ¶ÓÁĞ
+            try {
+                //è¯¥ä»»åŠ¡ç»“æŸåï¼Œä¸å…³é—­çº¿ç¨‹ï¼Œè€Œæ˜¯æ”¾å…¥çº¿ç¨‹æ± ç©ºé—²é˜Ÿåˆ—
                 pool.repool(this);
-                synchronized (this) 
-                {
-                	//Ïß³Ì¿ÕÏĞ£¬µÈ´ıĞÂµÄÈÎÎñµ½À´
+                synchronized (this) {
+                    //çº¿ç¨‹ç©ºé—²ï¼Œç­‰å¾…æ–°çš„ä»»åŠ¡åˆ°æ¥
                     wait();
                 }
-            }
-            catch (InterruptedException ie)
-            {
+            } catch (InterruptedException ie) {
             }
             isIdle = false;
         }
     }
-    
-    
-    public synchronized void setTarget(java.lang.Runnable newTarget) 
-    {
-        target = newTarget; 
-        //ÉèÖÃÁËÈÎÎñÖ®ºó£¬Í¨Öªrun·½·¨£¬¿ªÊ¼Ö´ĞĞÕâ¸öÈÎÎñ
-        notifyAll();       
+
+
+    public synchronized void setTarget(java.lang.Runnable newTarget) {
+        target = newTarget;
+        //è®¾ç½®äº†ä»»åŠ¡ä¹‹åï¼Œé€šçŸ¥runæ–¹æ³•ï¼Œå¼€å§‹æ‰§è¡Œè¿™ä¸ªä»»åŠ¡
+        notifyAll();
     }
-    
-    public synchronized void shutDown()
-    {
+
+    public synchronized void shutDown() {
         isShutDown = true;
         notifyAll();
     }

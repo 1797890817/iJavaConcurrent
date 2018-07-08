@@ -2,7 +2,6 @@
 package geym.conc.ch3.pool;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +16,7 @@ public class ExtThreadPool {
 
         @Override
         public void run() {
-            System.out.println("ÕıÔÚÖ´ĞĞ" + ":Thread ID:" + Thread.currentThread().getId()
+            System.out.println("æ­£åœ¨æ‰§è¡Œ" + ":Thread ID:" + Thread.currentThread().getId()
                     + ",Task Name=" + name);
             try {
                 Thread.sleep(100);
@@ -33,17 +32,17 @@ public class ExtThreadPool {
                 new LinkedBlockingQueue<Runnable>()) {
             @Override
             protected void beforeExecute(Thread t, Runnable r) {
-                System.out.println("×¼±¸Ö´ĞĞ£º" + ((MyTask) r).name);
+                System.out.println("å‡†å¤‡æ‰§è¡Œï¼š" + ((MyTask) r).name);
             }
 
             @Override
             protected void afterExecute(Runnable r, Throwable t) {
-                System.out.println("Ö´ĞĞÍê³É£º" + ((MyTask) r).name);
+                System.out.println("æ‰§è¡Œå®Œæˆï¼š" + ((MyTask) r).name);
             }
 
             @Override
             protected void terminated() {
-                System.out.println("Ïß³Ì³ØÍË³ö");
+                System.out.println("çº¿ç¨‹æ± é€€å‡º");
             }
 
         };
