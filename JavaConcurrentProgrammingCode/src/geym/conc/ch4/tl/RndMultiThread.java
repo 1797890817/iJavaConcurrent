@@ -2,11 +2,7 @@
 package geym.conc.ch4.tl;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class RndMultiThread {
     public static final int GEN_COUNT = 10000000;
@@ -59,9 +55,9 @@ public class RndMultiThread {
         for (int i = 0; i < THREAD_COUNT; i++) {
             totaltime += futs[i].get();
         }
-        System.out.println("¶àÏß³Ì·ÃÎÊÍ¬Ò»¸öRandomÊµÀý:" + totaltime + "ms");
+        System.out.println("å¤šçº¿ç¨‹è®¿é—®åŒä¸€ä¸ªRandomå®žä¾‹:" + totaltime + "ms");
 
-        //ThreadLocalµÄÇé¿ö
+        //ThreadLocalçš„æƒ…å†µ
         for (int i = 0; i < THREAD_COUNT; i++) {
             futs[i] = exe.submit(new RndTask(1));
         }
@@ -69,7 +65,7 @@ public class RndMultiThread {
         for (int i = 0; i < THREAD_COUNT; i++) {
             totaltime += futs[i].get();
         }
-        System.out.println("Ê¹ÓÃThreadLocal°ü×°RandomÊµÀý:" + totaltime + "ms");
+        System.out.println("ä½¿ç”¨ThreadLocalåŒ…è£…Randomå®žä¾‹:" + totaltime + "ms");
         exe.shutdown();
     }
 }

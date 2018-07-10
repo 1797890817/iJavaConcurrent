@@ -4,37 +4,43 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 /**
- * 1. AtomicIntegerFieldUpdaterÓĞ·ÃÎÊÈ¨ÏŞ
- * 2. ±ØĞëÊÇ·Ç¾²Ì¬×Ö¶Î
- * 3. ±ØĞëÓĞvolatile
- * @author Geym
+ * 1. AtomicIntegerFieldUpdateræœ‰è®¿é—®æƒé™
+ * 2. å¿…é¡»æ˜¯éé™æ€å­—æ®µ
+ * 3. å¿…é¡»æœ‰volatile
+ * å¦‚æœ AtomiclntegerFieldUpdater çœŸçš„ä¿è¯äº†çº¿ç¨‹å®‰å…¨ï¼Œ
+ * é‚£ä¹ˆæœ€ç»ˆ Candidate.score å’Œ allScore çš„å€¼å¿…ç„¶æ˜¯ç›¸ç­‰çš„
  *
+ * @author Geym
  */
 public class AtomicIntegerFieldUpdaterDemo {
-    public static class Candidate{
+    public static class Candidate {
         int id;
         volatile int score;
     }
-    public final static AtomicIntegerFieldUpdater<Candidate> scoreUpdater 
-        = AtomicIntegerFieldUpdater.newUpdater(Candidate.class, "score");
-    //¼ì²éUpdaterÊÇ·ñ¹¤×÷ÕıÈ·
-    public static AtomicInteger allScore=new AtomicInteger(0);
+
+    public final static AtomicIntegerFieldUpdater<Candidate> scoreUpdater
+            = AtomicIntegerFieldUpdater.newUpdater(Candidate.class, "score");
+    //æ£€æŸ¥Updateræ˜¯å¦å·¥ä½œæ­£ç¡®
+    public static AtomicInteger allScore = new AtomicInteger(0);
+
     public static void main(String[] args) throws InterruptedException {
-        final Candidate stu=new Candidate();
-        Thread[] t=new Thread[10000];
-        for(int i = 0 ; i < 10000 ; i++) {  
-            t[i]=new Thread() {  
-                public void run() {  
-                    if(Math.random()>0.4){
+        final Candidate stu = new Candidate();
+        Thread[] t = new Thread[10000];
+        for (int i = 0; i < 10000; i++) {
+            t[i] = new Thread() {
+                public void run() {
+                    if (Math.random() > 0.4) {
                         scoreUpdater.incrementAndGet(stu);
                         allScore.incrementAndGet();
                     }
-                }  
+                }
             };
             t[i].start();
-        }  
-        for(int i = 0 ; i < 10000 ; i++) {  t[i].join();}
-        System.out.println("score="+stu.score);
-        System.out.println("allScore="+allScore);
+        }
+        for (int i = 0; i < 10000; i++) {
+            t[i].join();
+        }
+        System.out.println("score=" + stu.score);
+        System.out.println("allScore=" + allScore);
     }
 }

@@ -11,15 +11,18 @@ import java.util.concurrent.Executors;
 public class ThreadLocalDemo_Gc {
     static volatile ThreadLocal<SimpleDateFormat> tl = new ThreadLocal<SimpleDateFormat>() {
         protected void finalize() throws Throwable {
-            System.out.println(this.toString() + " is gc");
+            System.out.println(this.toString() + " is gc");                 //ç”¨æ¥ç¡®è®¤gcæ˜¯å¦æ‰§è¡Œï¼
         }
     };
     static volatile CountDownLatch cd = new CountDownLatch(10000);
+
     public static class ParseDate implements Runnable {
         int i = 0;
+
         public ParseDate(int i) {
             this.i = i;
         }
+
         public void run() {
             try {
                 if (tl.get() == null) {
@@ -49,7 +52,7 @@ public class ThreadLocalDemo_Gc {
         tl = null;
         System.gc();
         System.out.println("first GC complete!!");
-        //ÔÚÉèÖÃThreadLocalµÄÊ±ºò£¬»áÇå³ıThreadLocalMapÖĞµÄÎŞĞ§¶ÔÏó
+        //åœ¨è®¾ç½®ThreadLocalçš„æ—¶å€™ï¼Œä¼šæ¸…é™¤ThreadLocalMapä¸­çš„æ— æ•ˆå¯¹è±¡
         tl = new ThreadLocal<SimpleDateFormat>();
         cd = new CountDownLatch(10000);
         for (int i = 0; i < 10000; i++) {
@@ -57,7 +60,7 @@ public class ThreadLocalDemo_Gc {
         }
         cd.await();
         Thread.sleep(1000);
-        
+
         System.gc();
         System.out.println("second GC complete!!");
 

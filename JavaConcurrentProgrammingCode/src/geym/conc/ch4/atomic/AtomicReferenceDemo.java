@@ -3,52 +3,56 @@ package geym.conc.ch4.atomic;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AtomicReferenceDemo {
-	static AtomicReference<Integer> money=new AtomicReference<Integer>();
-	public static void main(String[] args) {
-	    money.set(19);
-	    //Ä£Äâ¶à¸öÏß³ÌÍ¬Ê±¸üĞÂºóÌ¨Êı¾İ¿â£¬ÎªÓÃ»§³äÖµ
-	    for(int i = 0 ; i < 3 ; i++) {              
-            new Thread() {  
-                public void run() {  
-                    while(true){
-                        while(true){
-                            Integer m=money.get();
-                            if(m<20){
-                                if(money.compareAndSet(m, m+20)){
-                                    System.out.println("Óà¶îĞ¡ÓÚ20Ôª£¬³äÖµ³É¹¦£¬Óà¶î:"+money.get()+"Ôª");
+    static AtomicReference<Integer> money = new AtomicReference<Integer>();
+
+    public static void main(String[] args) {
+        money.set(19);
+        //æ¨¡æ‹Ÿå¤šä¸ªçº¿ç¨‹åŒæ—¶æ›´æ–°åå°æ•°æ®åº“ï¼Œä¸ºç”¨æˆ·å……å€¼
+        for (int i = 0; i < 3; i++) {
+            new Thread() {
+                public void run() {
+                    while (true) {
+                        while (true) {
+                            Integer m = money.get();
+                            if (m < 20) {
+                                if (money.compareAndSet(m, m + 20)) {
+                                    System.out.println("Thread " + Thread.currentThread().getId() + ",ä½™é¢å°äº20å…ƒï¼Œå……å€¼æˆåŠŸï¼Œä½™é¢:" + money.get() + "å…ƒ");
                                     break;
                                 }
-                            }else{
-                                //System.out.println("Óà¶î´óÓÚ20Ôª£¬ÎŞĞè³äÖµ");
-                                break ;
+                            } else {
+                                //System.out.println("ä½™é¢å¤§äº20å…ƒï¼Œæ— éœ€å……å€¼");
+                                break;
                             }
                         }
                     }
-                }  
+                }
             }.start();
         }
-	    
-	    //ÓÃ»§Ïû·ÑÏß³Ì£¬Ä£ÄâÏû·ÑĞĞÎª
-	    new Thread() {  
-            public void run() {  
-                for(int i=0;i<100;i++){
-                    while(true){
-                        Integer m=money.get();
-                        if(m>10){
-                            System.out.println("´óÓÚ10Ôª");
-                            if(money.compareAndSet(m, m-10)){
-                                System.out.println("³É¹¦Ïû·Ñ10Ôª£¬Óà¶î:"+money.get());
+
+        //ç”¨æˆ·æ¶ˆè´¹çº¿ç¨‹ï¼Œæ¨¡æ‹Ÿæ¶ˆè´¹è¡Œä¸º
+        new Thread() {
+            public void run() {
+                for (int i = 0; i < 100; i++) {
+                    while (true) {
+                        Integer m = money.get();
+                        if (m > 10) {
+                            System.out.println("å¤§äº10å…ƒ");
+                            if (money.compareAndSet(m, m - 10)) {
+                                System.out.println("Thread " + Thread.currentThread().getId() + ",æˆåŠŸæ¶ˆè´¹10å…ƒï¼Œä½™é¢:" + money.get());
                                 break;
                             }
-                        }else{
-                            System.out.println("Ã»ÓĞ×ã¹»µÄ½ğ¶î");
+                        } else {
+                            System.out.println("æ²¡æœ‰è¶³å¤Ÿçš„é‡‘é¢");
                             break;
                         }
                     }
-                    try {Thread.sleep(100);} catch (InterruptedException e) {}
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
                 }
-            }  
-        }.start();  
-	}
+            }
+        }.start();
+    }
 
 }
